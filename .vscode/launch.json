@@ -1,0 +1,24 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-AdminApplication<Admin>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "bd.edu.diu.cis.admin.AdminApplication",
+            "projectName": "Admin",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-CustomerApplication<Customer>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "bd.edu.diu.cis.customer.CustomerApplication",
+            "projectName": "Customer",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
