@@ -1,0 +1,58 @@
+version: '3.8'
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: vtat2011
+      MYSQL_DATABASE: jgps_rudra
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  library-service:
+    build:
+      context: .
+      dockerfile: Library/Dockerfile
+    ports:
+      - "8083:8083"
+    depends_on:
+      - mysql
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/jgps_rudra?createDatabaseIfNotExist=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: vtat2011
+
+  admin-service:
+    build:
+      context: .
+      dockerfile: Admin/Dockerfile
+    ports:
+      - "8087:8087"
+    depends_on:
+      - mysql
+      - library-service
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/jgps_rudra?createDatabaseIfNotExist=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: vtat2011
+
+  customer-service:
+    build:
+      context: .
+      dockerfile: Customer/Dockerfile
+    ports:
+      - "8020:8020"
+    depends_on:
+      - mysql
+      - library-service
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/jgps_rudra?createDatabaseIfNotExist=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: vtat2011
+
+volumes:
+  mysql-data:
+    driver: local

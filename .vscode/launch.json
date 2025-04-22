@@ -8,7 +8,8 @@
             "mainClass": "bd.edu.diu.cis.admin.AdminApplication",
             "projectName": "Admin",
             "args": "",
-            "envFile": "${workspaceFolder}/.env"
+            "envFile": "${workspaceFolder}/.env",
+            "vmArgs": " -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=61410 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dspring.jmx.enabled=true -Djava.rmi.server.hostname=localhost -Dspring.application.admin.enabled=true -Dspring.boot.project.name=Admin"
         },
         {
             "type": "java",
@@ -17,6 +18,17 @@
             "cwd": "${workspaceFolder}",
             "mainClass": "bd.edu.diu.cis.customer.CustomerApplication",
             "projectName": "Customer",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env",
+            "vmArgs": " -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=62596 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dspring.jmx.enabled=true -Djava.rmi.server.hostname=localhost -Dspring.application.admin.enabled=true -Dspring.boot.project.name=Customer"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-LibraryApplication<Library>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "bd.edu.diu.cis.library.LibraryApplication",
+            "projectName": "Library",
             "args": "",
             "envFile": "${workspaceFolder}/.env"
         }
