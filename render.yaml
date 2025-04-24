@@ -1,0 +1,53 @@
+services:
+  - type: web
+    name: library-service
+    env: docker
+    dockerfilePath: Library/Dockerfile
+    buildCommand: docker build -t library-service -f Library/Dockerfile .
+    startCommand: docker run library-service
+    envVars:
+      - key: SPRING_DATASOURCE_URL
+        fromDatabase:
+          name: mysql
+          property: connectionString
+      - key: SPRING_DATASOURCE_USERNAME
+        value: root
+      - key: SPRING_DATASOURCE_PASSWORD
+        value: vtat2011
+
+  - type: web
+    name: admin-service
+    env: docker
+    dockerfilePath: Admin/Dockerfile
+    buildCommand: docker build -t admin-service -f Admin/Dockerfile .
+    startCommand: docker run admin-service
+    envVars:
+      - key: SPRING_DATASOURCE_URL
+        fromDatabase:
+          name: mysql
+          property: connectionString
+      - key: SPRING_DATASOURCE_USERNAME
+        value: root
+      - key: SPRING_DATASOURCE_PASSWORD
+        value: vtat2011
+
+  - type: web
+    name: customer-service
+    env: docker
+    dockerfilePath: Customer/Dockerfile
+    buildCommand: docker build -t customer-service -f Customer/Dockerfile .
+    startCommand: docker run customer-service
+    envVars:
+      - key: SPRING_DATASOURCE_URL
+        fromDatabase:
+          name: mysql
+          property: connectionString
+      - key: SPRING_DATASOURCE_USERNAME
+        value: root
+      - key: SPRING_DATASOURCE_PASSWORD
+        value: vtat2011
+
+databases:
+  - name: mysql
+    ipAllowList: []
+    plan: free
