@@ -5,8 +5,8 @@ COPY . .
 RUN mvn clean package -DskipTests
 
 # Run Stage
-FROM openjdk:17-jdk
+FROM openjdk:17-jdk-slim
 WORKDIR /app
-COPY --from=build /app/Library/target/*.jar app.jar
+COPY Library/target/*.jar app.jar
 EXPOSE 8083
-CMD ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]

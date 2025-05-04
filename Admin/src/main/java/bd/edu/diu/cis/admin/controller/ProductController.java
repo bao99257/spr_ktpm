@@ -134,48 +134,47 @@ public class ProductController {
         return "update-product";
     }
 
-
     @PostMapping("/update-product/{id}")
-public String processUpdate(@PathVariable("id") Long id,
-        @ModelAttribute("productDto") ProductDto productDto,
-        @RequestParam("imageProduct") MultipartFile imageProduct,
-        @RequestParam("categoryId") Long categoryId, // Thêm tham số categoryId
-        RedirectAttributes attributes) {
-    try {
-        // Lấy Category từ service dựa trên categoryId
-        Category categoryEntity = categoryService.findById(categoryId);
+    public String processUpdate(@PathVariable("id") Long id,
+            @ModelAttribute("productDto") ProductDto productDto,
+            @RequestParam("imageProduct") MultipartFile imageProduct,
+            @RequestParam("categoryId") Long categoryId, // Thêm tham số categoryId
+            RedirectAttributes attributes) {
+        try {
+            // Lấy Category từ service dựa trên categoryId
+            Category categoryEntity = categoryService.findById(categoryId);
 
-        // Chuyển đổi từ Category sang CategoryDto
-        CategoryDto category = new CategoryDto();
-        category.setCategoryId(categoryEntity.getId());
-        category.setCategoryName(categoryEntity.getName());
-        category.setCategoryDescription(categoryEntity.getDescription());
-        
-        // Gán category vào productDto
-        productDto.setCategory(category);
+            // Chuyển đổi từ Category sang CategoryDto
+            CategoryDto category = new CategoryDto();
+            category.setCategoryId(categoryEntity.getId());
+            category.setCategoryName(categoryEntity.getName());
+            category.setCategoryDescription(categoryEntity.getDescription());
 
-        productService.update(imageProduct, productDto);
-        attributes.addFlashAttribute("success", "Update successfully!");
-    } catch (Exception e) {
-        e.printStackTrace();
-        attributes.addFlashAttribute("error", "Failed to update!");
+            // Gán category vào productDto
+            productDto.setCategory(category);
+
+            productService.update(imageProduct, productDto);
+            attributes.addFlashAttribute("success", "Update successfully!");
+        } catch (Exception e) {
+            e.printStackTrace();
+            attributes.addFlashAttribute("error", "Failed to update!");
+        }
+        return "redirect:/products/0";
     }
-    return "redirect:/products/0";
-}
 
     // @PostMapping("/update-product/{id}")
     // public String processUpdate(@PathVariable("id") Long id,
-    //         @ModelAttribute("productDto") ProductDto productDto,
-    //         @RequestParam("imageProduct") MultipartFile imageProduct,
-    //         RedirectAttributes attributes) {
-    //     try {
-    //         productService.update(imageProduct, productDto);
-    //         attributes.addFlashAttribute("success", "Update successfully!");
-    //     } catch (Exception e) {
-    //         e.printStackTrace();
-    //         attributes.addFlashAttribute("error", "Failed to update!");
-    //     }
-    //     return "redirect:/products/0";
+    // @ModelAttribute("productDto") ProductDto productDto,
+    // @RequestParam("imageProduct") MultipartFile imageProduct,
+    // RedirectAttributes attributes) {
+    // try {
+    // productService.update(imageProduct, productDto);
+    // attributes.addFlashAttribute("success", "Update successfully!");
+    // } catch (Exception e) {
+    // e.printStackTrace();
+    // attributes.addFlashAttribute("error", "Failed to update!");
+    // }
+    // return "redirect:/products/0";
 
     // }
 
@@ -210,8 +209,8 @@ public String processUpdate(@PathVariable("id") Long id,
             attributes.addFlashAttribute("success", "Delete successfully");
         } catch (Exception e) {
             e.printStackTrace();
-            attributes.addFlashAttribute("failed", "Failed to delete");
-        }
+            /*  */ attributes.addFlashAttribute("failed", "Failed to delete");
+        } /*  */
 
         return "redirect:/products/0";
     }
