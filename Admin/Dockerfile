@@ -1,12 +1,12 @@
-# Build Stage
-FROM maven:3.8.4-openjdk-17 AS build
-WORKDIR /app
-COPY . .
-RUN mvn clean package -DskipTests
-
-# Run Stage
+# Dockerfile chính ở thư mục gốc
 FROM openjdk:17-jdk-slim
 WORKDIR /app
-COPY Admin/target/*.jar app.jar
-EXPOSE 8087
-ENTRYPOINT ["java", "-jar", "app.jar"]
+
+# Sao chép các file JAR từ các module
+COPY Library/target/*.jar library.jar
+COPY Admin/target/*.jar admin.jar
+COPY Customer/target/*.jar customer.jar
+
+# Mặc định chạy service Library
+EXPOSE 8083
+ENTRYPOINT ["java", "-jar", "library.jar"]
