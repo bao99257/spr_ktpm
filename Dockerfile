@@ -2,9 +2,14 @@
 FROM maven:3.8.4-openjdk-17 AS build
 WORKDIR /app
 COPY . .
-# Bỏ qua cả compile test
-RUN mvn clean install -pl Library -am -Dmaven.test.skip=true
-# Sau đó build tất cả, bỏ qua cả compile test
+
+# Cài đặt parent project trước
+RUN mvn clean install -N -Dmaven.test.skip=true
+
+# Cài đặt Library module
+RUN mvn clean install -pl Library -Dmaven.test.skip=true
+
+# Sau đó build tất cả các module
 RUN mvn clean package -Dmaven.test.skip=true
 
 # Run Stage
@@ -17,6 +22,7 @@ COPY --from=build /app/Customer/target/*.jar customer.jar
 # Mặc định chạy service Library
 EXPOSE 8083
 ENTRYPOINT ["java", "-jar", "library.jar"]
+
 
 
 
