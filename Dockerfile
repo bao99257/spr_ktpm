@@ -1,10 +1,20 @@
-# Dockerfile ch�nh ? thu m?c g?c
+# Dockerfile chính ở thư mục gốc - Multi-stage build
+FROM maven:3.8.4-openjdk-17 AS build
+WORKDIR /app
+COPY . .
+RUN mvn clean package -DskipTests
+
+# Run Stage
 FROM openjdk:17-jdk-slim
 WORKDIR /app
-# Sao ch�p c�c file JAR t? c�c module
-COPY Library/target/*.jar library.jar
-COPY Admin/target/*.jar admin.jar
-COPY Customer/target/*.jar customer.jar
-# M?c d?nh ch?y service Library
+COPY --from=build /app/Library/target/*.jar library.jar
+COPY --from=build /app/Admin/target/*.jar admin.jar
+COPY --from=build /app/Customer/target/*.jar customer.jar
+
+# Mặc định chạy service Library
 EXPOSE 8083
 ENTRYPOINT ["java", "-jar", "library.jar"]
+
+
+
+
