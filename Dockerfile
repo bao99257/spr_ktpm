@@ -4,24 +4,19 @@ WORKDIR /app
 COPY . .
 
 # Hiển thị cấu trúc thư mục để kiểm tra
-RUN ls -la && ls -la Library && ls -la Admin
+RUN ls -la
 
-# Kiểm tra pom.xml của các module
-RUN cat pom.xml
-RUN cat Library/pom.xml
-RUN cat Admin/pom.xml
-
-# Cài đặt parent project
+# Cài đặt parent project trước
 RUN mvn clean install -N
 
-# Cài đặt Library module và cài đặt vào local repository
-RUN cd Library && mvn clean install -DskipTests
+# Cài đặt Library module với debug để xem chi tiết
+RUN mvn clean install -pl Library -DskipTests -X
 
-# Cài đặt Admin module sau khi Library đã được cài đặt
-RUN cd Admin && mvn clean package -DskipTests
+# Kiểm tra xem Library đã được cài đặt vào local repository chưa
+RUN ls -la /root/.m2/repository/
 
-# Cài đặt Customer module
-RUN cd Customer && mvn clean package -DskipTests
+# Cài đặt Admin và Customer với debug
+RUN mvn clean package -pl Admin,Customer -DskipTests
 
 # Run Stage
 FROM openjdk:17-jdk-slim
@@ -35,6 +30,7 @@ COPY --from=build /app/Customer/target/*.jar /app/customer.jar
 # Mặc định chạy service Library
 EXPOSE 8083
 ENTRYPOINT ["java", "-jar", "/app/library.jar"]
+
 
 
 
