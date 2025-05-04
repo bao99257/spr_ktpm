@@ -3,14 +3,25 @@ FROM maven:3.8.4-openjdk-17 AS build
 WORKDIR /app
 COPY . .
 
-# Cài đặt parent project trước
-RUN mvn clean install -N -Dmaven.test.skip=true
+# Hiển thị cấu trúc thư mục để kiểm tra
+RUN ls -la && ls -la Library && ls -la Admin
 
-# Cài đặt Library module với debug để xem chi tiết
-RUN mvn clean install -pl Library -Dmaven.test.skip=true
+# Kiểm tra pom.xml của các module
+RUN cat pom.xml
+RUN cat Library/pom.xml
+RUN cat Admin/pom.xml
 
-# Cài đặt Admin và Customer với debug
-RUN mvn clean package -pl Admin,Customer -Dmaven.test.skip=true
+# Cài đặt parent project
+RUN mvn clean install -N
+
+# Cài đặt Library module và cài đặt vào local repository
+RUN cd Library && mvn clean install -DskipTests
+
+# Cài đặt Admin module sau khi Library đã được cài đặt
+RUN cd Admin && mvn clean package -DskipTests
+
+# Cài đặt Customer module
+RUN cd Customer && mvn clean package -DskipTests
 
 # Run Stage
 FROM openjdk:17-jdk-slim
@@ -24,6 +35,7 @@ COPY --from=build /app/Customer/target/*.jar /app/customer.jar
 # Mặc định chạy service Library
 EXPOSE 8083
 ENTRYPOINT ["java", "-jar", "/app/library.jar"]
+
 
 
 
