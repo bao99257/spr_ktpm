@@ -4,13 +4,17 @@ WORKDIR /app
 COPY . .
 
 # Cài đặt parent project trước
-RUN mvn clean install -N -Dmaven.test.skip=true
+RUN mvn clean install -N
 
-# Cài đặt Library module trước vì các module khác phụ thuộc vào nó
-RUN mvn clean install -pl Library -Dmaven.test.skip=true
+# Cài đặt từng module riêng biệt
+# Đầu tiên là Library vì các module khác phụ thuộc vào nó
+RUN cd Library && mvn clean install -Dmaven.test.skip=true
 
-# Sau đó build các module còn lại với phụ thuộc
-RUN mvn clean install -pl Admin,Customer -Dmaven.test.skip=true
+# Sau đó là Admin
+RUN cd Admin && mvn clean install -Dmaven.test.skip=true
+
+# Cuối cùng là Customer
+RUN cd Customer && mvn clean install -Dmaven.test.skip=true
 
 # Run Stage
 FROM openjdk:17-jdk-slim
@@ -22,6 +26,7 @@ COPY --from=build /app/Customer/target/*.jar customer.jar
 # Mặc định chạy service Library
 EXPOSE 8083
 ENTRYPOINT ["java", "-jar", "library.jar"]
+
 
 
 
