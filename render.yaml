@@ -17,47 +17,8 @@ services:
       - key: SERVER_PORT
         value: 8083
 
-  - type: web
-    name: admin-service
-    env: docker
-    dockerfilePath: Admin/Dockerfile
-    buildCommand: docker build -t admin-service -f Admin/Dockerfile .
-    startCommand: docker run -p $PORT:8087 admin-service
-    envVars:
-      - key: SPRING_DATASOURCE_URL
-        fromDatabase:
-          name: mysql
-          property: connectionString
-      - key: SPRING_DATASOURCE_USERNAME
-        value: root
-      - key: SPRING_DATASOURCE_PASSWORD
-        value: vtat2011
-      - key: SERVER_PORT
-        value: 8087
-    dependsOn:
-      - library-service
-
-  - type: web
-    name: customer-service
-    env: docker
-    dockerfilePath: Customer/Dockerfile
-    buildCommand: docker build -t customer-service -f Customer/Dockerfile .
-    startCommand: docker run -p $PORT:8020 customer-service
-    envVars:
-      - key: SPRING_DATASOURCE_URL
-        fromDatabase:
-          name: mysql
-          property: connectionString
-      - key: SPRING_DATASOURCE_USERNAME
-        value: root
-      - key: SPRING_DATASOURCE_PASSWORD
-        value: vtat2011
-      - key: SERVER_PORT
-        value: 8020
-    dependsOn:
-      - library-service
-
 databases:
   - name: mysql
     ipAllowList: []
     plan: free
+
