@@ -9,13 +9,13 @@ RUN ls -la
 # Cài đặt parent project trước
 RUN mvn clean install -N
 
-# Cài đặt Library module với debug để xem chi tiết
-RUN mvn clean install -pl Library -DskipTests -X
+# Cài đặt Library module trước và đảm bảo nó được install vào local repository
+RUN mvn clean install -pl Library -DskipTests
 
 # Kiểm tra xem Library đã được cài đặt vào local repository chưa
-RUN ls -la /root/.m2/repository/
+RUN ls -la /root/.m2/repository/bd/edu/diu/cis/
 
-# Cài đặt Admin và Customer với debug
+# Cài đặt Admin và Customer
 RUN mvn clean package -pl Admin,Customer -DskipTests
 
 # Run Stage
@@ -30,6 +30,8 @@ COPY --from=build /app/Customer/target/*.jar /app/customer.jar
 # Mặc định chạy service Library
 EXPOSE 8083
 ENTRYPOINT ["java", "-jar", "/app/library.jar"]
+
+
 
 
 
