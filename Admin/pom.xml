@@ -23,11 +23,14 @@
     </properties>
 
     <dependencies>
+        <!-- Thêm dependency đến Library module -->
         <dependency>
-            <groupId>bd.edu.diu.cis.library</groupId>
+            <groupId>bd.edu.diu.cis</groupId>
             <artifactId>Library</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
+        
+        <!-- Các dependency khác -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
